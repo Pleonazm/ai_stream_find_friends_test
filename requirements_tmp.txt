@@ -20,3 +20,4 @@ streamlit-audiorecorder==0.0.6
 tzdata @ file:///croot/python-tzdata_1690578112552/work
 unicodedata2 @ file:///croot/unicodedata2_1736541023050/work
 urllib3 @ file:///croot/urllib3_1737133630106/work
+
