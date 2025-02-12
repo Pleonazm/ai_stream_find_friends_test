@@ -11,6 +11,8 @@ for conf_var in ['df', 'trained', 'setup', 'model', 'clustered_df', 'loaded', 'h
     if conf_var not in st.session_state:
         st.session_state[conf_var] = None
 st.set_page_config(layout='wide')
+if st.session_state['history'] is None:
+    st.session_state['history'] = list()
 
 def load_data(file_obj, data_type='.csv'):
     """Załadowanie danch z CSV ;lub XLSX"""
@@ -179,8 +181,7 @@ with tab_predict:
             #     ai_response = ask_open_ai(open_ai_client=open_ai_client, system_prompt=return_text, user_prompt=user_prompt_area)
 
             st.markdown(ai_response)
-            if st.session_state['history'] is None:
-                st.session_state['history'] = list()
+
 
             st.session_state['history'].append(ai_response)
 
