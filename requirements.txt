@@ -1,0 +1,6 @@
+pycaret[full]
+pandas
+openai
+streamlit
+openpyxl
+numpy
