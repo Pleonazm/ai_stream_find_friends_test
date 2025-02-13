@@ -7,7 +7,7 @@ from pathlib import Path
 from openai import OpenAI
 
 #init
-for conf_var in ['df', 'trained', 'setup', 'model', 'clustered_df', 'loaded', 'history']:
+for conf_var in ['df', 'trained', 'setup', 'model', 'clustered_df', 'loaded']:
     if conf_var not in st.session_state:
         st.session_state[conf_var] = None
 st.set_page_config(layout='wide')
@@ -49,7 +49,7 @@ def train_model(data, session_id=1, force_train=False):
         st.session_state['model'] = load_model('welcome_survey_cluster_v2')
         st.session_state['trained'] = True
         st.info('Trening zakończony')
-        st.write(st.session_state)
+        # st.write(st.session_state)
     else:
         st.warning('Model już wytrenowany')
 
@@ -90,6 +90,11 @@ def ask_open_ai(open_ai_client, system_prompt:str, user_prompt:str, open_ai_mode
 
     return response.choices[0].message.content
 
+def history_to_json(hist_data:list) -> str:
+    """Konwersja listy/historii do JSON"""
+    return json.dumps(hist_data)
+
+
 
 
 with st.sidebar:
@@ -117,7 +122,7 @@ with tab_train:
         else:
             st.info(f'OK, plik {data_type}')
             load_data(uploaded_file, data_type=data_type)
-            st.write(st.session_state)
+            # st.write(st.session_state)
 
     if st.session_state['loaded']:
 
@@ -128,6 +133,8 @@ with tab_train:
             with st.spinner("Trenowanie..."):
                 train_model(st.session_state['df'])
             # st.success('Zakończono')
+    with st.expander('Session State Info'):
+        st.write(st.session_state)
 with tab_data:
     base_c, cluster_c = st.columns(2)
     with base_c:
@@ -194,3 +201,5 @@ with tab_history:
     for hist_q in st.session_state['history']:
         st.markdown(hist_q)
         st.write("---")
+    json_hist = history_to_json(st.session_state['history'])
+    st.download_button("Zapisz Historię", json_hist, file_name='app_ai_streamlit_history.json')
